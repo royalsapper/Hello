@@ -22,12 +22,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startDataService();
+            }
+        });
+
+        Intent intent = getIntent();
+        processIntent(intent);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        processIntent(intent);
+    }
+
+    public void processIntent(Intent intent) {
+        if (intent != null) {
+            String command = intent.getStringExtra("command");
+            String data = intent.getStringExtra("data");
+
+            showToast("서비스로부터 전달받은 데이터 : " + command + ", " + data);
+        }
     }
 
     public void showMenuActivity() {
         Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra("name", "john");
         startActivityForResult(intent, 101);
+    }
+
+    public void startDataService() {
+        Intent intent = new Intent(this, DataService.class);
+        intent.putExtra("command", "show");
+        intent.putExtra("data", "john");
+        startService(intent);
     }
 
     @Override
